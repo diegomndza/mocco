@@ -1,41 +1,50 @@
-<footer class="site-footer" style="padding: 4rem 0 2rem; text-align: center; border-top: 1px solid #172439; margin-top: 4rem;">
-    <div class="container">
-        <div class="newsletter-banner" style="background: #172439; padding: 3rem; border-radius: 12px; margin-bottom: 3rem;">
-            <h3 style="margin-top:0;">Únete a MOCCO</h3>
-            <form action="TU_URL_DE_MAILCHIMP_O_BREVO" method="POST" style="display: flex; justify-content: center; gap: 10px; margin-top: 1.5rem; flex-wrap: wrap;">
-                <input type="email" name="EMAIL" placeholder="Tu correo electrónico" required style="padding: 12px; width: 100%; max-width: 300px; border-radius: 6px; border: none;">
-                <button type="submit" style="padding: 12px 24px; background: #fff; color: #000; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Suscribirme</button>
-            </form>
+<main class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+        <section id="newsletter" class="bg-mocco-card rounded-3xl p-10 md:p-16 text-center max-w-5xl mx-auto my-24 scroll-mt-32">
+            <h2 class="text-3xl md:text-5xl font-bold mb-8 max-w-2xl mx-auto leading-tight text-white">Recibe lo mejor de la moda mexicana en tu correo.</h2>
+            
+            <div class="flex justify-center max-w-lg mx-auto">
+                <!-- Formulario funcional de Jetpack -->
+                <?php 
+                    if (shortcode_exists('jetpack_subscription_form')) {
+                        echo do_shortcode('[jetpack_subscription_form title="" subscribe_text="" subscribe_button="Suscribirme" show_subscribers_total="false"]'); 
+                    } else {
+                        echo '<p class="text-mocco-subtext text-sm">Asegúrate de activar el módulo de suscripciones en Jetpack.</p>';
+                    }
+                ?>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-white/5 pt-16 pb-12 mt-10 bg-mocco-bg">
+        <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-8 mb-12">
+                <div class="text-white font-extrabold text-2xl tracking-widest cursor-pointer">
+                    <a href="<?php echo esc_url(home_url('/')); ?>">
+                        <img src="<?php echo esc_url(get_template_directory_uri() . '/images/logo_mocco_transparente.png'); ?>" alt="MOCCO MX" class="h-8 md:h-10 w-auto object-contain">
+                    </a>
+                </div>
+                
+                <div class="flex flex-wrap justify-center gap-8 text-sm font-medium text-mocco-subtext">
+                    <?php
+                    $footer_categories = get_categories(array('orderby' => 'name', 'order' => 'ASC', 'number' => 4));
+                    foreach($footer_categories as $fcat) {
+                        echo '<a href="' . esc_url(get_category_link($fcat->term_id)) . '" class="hover:text-white transition-colors">' . esc_html($fcat->name) . '</a>';
+                    }
+                    ?>
+                </div>
+
+                <div class="flex gap-6 text-mocco-subtext text-xl">
+                    <a href="https://www.instagram.com/mocco.mx" target="_blank" class="hover:text-white transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://www.tiktok.com/@mocco.mx" target="_blank" class="hover:text-white transition-colors"><i class="fa-brands fa-tiktok"></i></a>
+                </div>
+            </div>
+            
+            <div class="text-center text-xs text-mocco-subtext border-t border-white/10 pt-8">
+                &copy; <?php echo date('Y'); ?> MOCCO MX. Ciudad de México. Todos los derechos reservados.
+            </div>
         </div>
-        <p style="color: #526075; font-size: 0.9rem;">&copy; <?php echo date('Y'); ?> MOCCO MX.</p>
-    </div>
-</footer>
+    </footer>
 
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    // Menú Mobile
-    const toggle = document.getElementById('mobile-toggle');
-    const nav = document.getElementById('mobile-nav');
-    if(toggle && nav) {
-        toggle.addEventListener('click', () => nav.classList.toggle('active'));
-    }
-
-    // Slider
-    const track = document.getElementById('slider-track');
-    const lines = document.querySelectorAll('.slider-indicators .line');
-    if(track && lines.length > 0) {
-        let currentIndex = 0;
-        function goToSlide(index) {
-            track.style.transform = `translateX(-${index * 100}%)`;
-            lines.forEach(line => line.classList.remove('active'));
-            lines[index].classList.add('active');
-            currentIndex = index;
-        }
-        lines.forEach((line, index) => line.addEventListener('click', () => goToSlide(index)));
-        setInterval(() => goToSlide((currentIndex + 1) % 3), 6000); // Rota cada 6 segundos
-    }
-});
-</script>
-<?php wp_footer(); ?>
+    <?php wp_footer(); ?>
 </body>
 </html>
